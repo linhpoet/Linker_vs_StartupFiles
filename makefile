@@ -1,3 +1,5 @@
+#Linh
+
 PRO_DIR		:= .
 PROJ_NAME	:= Test_linker_startup_file_with_StandartMakefile
 OUTPUT_PATH	:= $(PRO_DIR)/output
@@ -32,27 +34,16 @@ CFLAGS		= -c -mcpu=$(MACH) -mthumb -std=gnu11 -Wall -O0 -I$(INC_DIR)
 #linker option
 LDFLAGS		= -nostdlib -T $(LINKER_FILES) -Wl,-Map=$(OUTPUT_PATH)/$(PROJ_NAME).map
 
-#all:main.o stm32_startup.o final.elf final.hex
-
 build: $(OBJ_FILES) $(LINKER_FILES)
 	$(CC) $(LDFLAGS) $(PATH_OBJS) -o $(OUTPUT_PATH)/$(PROJ_NAME).elf
 	arm-none-eabi-objcopy -O ihex $(OUTPUT_PATH)/$(PROJ_NAME).elf $(OUTPUT_PATH)/$(PROJ_NAME).hex
 	size $(OUTPUT_PATH)/$(PROJ_NAME).elf
-#$< = first prerequisite
 %.o: %.c $(INC_FILES)
 	$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$@
 
-#$^ = prerequisite,$< = first prerequisite, $@=target	
-#stm32_startup.o:stm32_startup.c
-#	$(CC) $(CFLAGS) $^ -o $@
-#final.elf: $(OUTPUT_PATH)/main.o stm32_startup.o
-#	$(CC) $(LDFLAGS) $^ -o $(OUTPUT_PATH)/$(PROJ_NAME).elf
-#final.hex:
-#	arm-none-eabi-objcopy -O ihex $(OUTPUT_PATH)/$(PROJ_NAME).elf $(OUTPUT_PATH)/$(PROJ_NAME).hex
 clean:
 	rm -rf *.o *.elf *.hex *.map $(OUTPUT_PATH)/*
 load:
 	openocd -f board/stm32f4discovery.cfg
-	
 print-%:
 	@echo $($(subst print-,,$@))
