@@ -24,13 +24,16 @@ PATH_OBJS	:= $(foreach OBJ_FILES,$(OBJ_FILES),$(OUTPUT_PATH)/$(OBJ_FILES))
 vpath %.c $(SRC_DIR)
 vpath %.h $(INC_DIR)
 
-COMPILER_DIR :=
+COMPILER_DIR := C:/Gcc_Tool/bin
 
 #compiler
-CC			= arm-none-eabi-gcc
+CC			= $(COMPILER_DIR)/arm-none-eabi-gcc
+ASM			= $(COMPILER_DIR)/arm-none-eabi-as
+LD			= $(COMPILER_DIR)/arm-none-eabi-ld
 MACH		= cortex-m4
 #compiler option
 CFLAGS		= -c -mcpu=$(MACH) -mthumb -std=gnu11 -Wall -O0 -I$(INC_DIR)
+ASMFLAGS	= -c -mcpu=$(MACH) -mthumb
 #linker option
 LDFLAGS		= -nostdlib -T $(LINKER_FILES) -Wl,-Map=$(OUTPUT_PATH)/$(PROJ_NAME).map
 
@@ -40,6 +43,14 @@ build: $(OBJ_FILES) $(LINKER_FILES)
 	size $(OUTPUT_PATH)/$(PROJ_NAME).elf
 %.o: %.c $(INC_FILES)
 	$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$@
+
+#buildasm: $(SRC_DIR)/(file).s
+#	@echo "to build asm file to .o file"
+#	$(ASM) $(ASMFLAGS) $< -o $(OUTPUT_PATH)/(file).o
+#link: $(OBJ_FILES) $(LINKER_FILES)
+#	@echo "link object file to create .elf file"
+#	$(LD) $(LDFLAGS) $(PATH_OBJS) -o $(OUTPUT_PATH)/$(PROJ_NAME).elf
+
 
 clean:
 	rm -rf *.o *.elf *.hex *.map $(OUTPUT_PATH)/*
