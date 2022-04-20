@@ -13,8 +13,12 @@ SYSTICK_Config_t *Systick = (uint32_t *)0xE000E010;
 
 void Systick_Delay_ms(uint32_t u32Delay);
 
+static int x;
+int Initialized_global_data = 10;
+static int staticglobal = 0;
 int main()
 {
+	static int y = 10;
 	uint32_t *pClockControl = (uint32_t*)(0x40023800 + 0x30);					//ahp1 peripheral clock enable reg
 	uint32_t *pModeReg_GPIOD = (uint32_t*)(0x40020C00);
 	uint32_t *pOutputReg_GPIOD = (uint32_t*)(0x40020C00 + 0x14);
